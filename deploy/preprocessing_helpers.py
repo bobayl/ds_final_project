@@ -190,7 +190,6 @@ def get_from_to(text, city_names):
     
 def load_df(path):
     file_list = glob.glob(path)
-    st.write(file_list)
 
     # Initialize an empty list to store DataFrames
     dataframes = []
