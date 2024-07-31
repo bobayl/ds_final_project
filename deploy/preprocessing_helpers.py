@@ -7,6 +7,8 @@ import unicodedata
 import glob
 import pandas as pd
 
+import streamlit as st
+
 
 def find_occurrence_type(headline):
     """ Input is a string that is normally leaded by the occurrence type"""
@@ -188,6 +190,7 @@ def get_from_to(text, city_names):
     
 def load_df(path):
     file_list = glob.glob(path)
+    st.write(file_list)
 
     # Initialize an empty list to store DataFrames
     dataframes = []
