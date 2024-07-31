@@ -1,16 +1,11 @@
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
-from IPython.display import display, Markdown
-from tqdm import tqdm
-import streamlit as st
+
 
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
 import fasttext
-
 from preprocessing_helpers import list_to_txt
 
 

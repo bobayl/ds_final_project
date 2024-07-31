@@ -8,7 +8,6 @@ import pandas as pd
 import re
 from tqdm import tqdm
 import streamlit as st
-import os
 import glob
 
 from scraping_helpers import *
@@ -16,11 +15,11 @@ from preprocessing_helpers import *
 
 
 
-def update(filepath):
+def update(path):
     """ The function takes the filepath to the full dataset and then updates that dataset by scraping the new entries on the webiste"""
 
     # The dataset
-    file_list = glob.glob('../data/processed/*.csv')
+    file_list = glob.glob(path)
 
     # Initialize an empty list to store DataFrames
     dataframes = []

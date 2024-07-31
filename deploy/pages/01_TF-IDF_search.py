@@ -1,10 +1,5 @@
 import streamlit as st
 
-import pandas as pd
-import numpy as np
-import seaborn as sns
-import matplotlib.pyplot as plt
-
 from search_models import *
 from preprocessing_helpers import *
 from scraping_helpers import *
