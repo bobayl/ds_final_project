@@ -1,4 +1,3 @@
-absl-py @ file:///home/conda/feedstock_root/build_artifacts/absl-py_1705494584803/work
 aiohttp @ file:///Users/runner/miniforge3/conda-bld/aiohttp_1713964894369/work
 aiosignal @ file:///home/conda/feedstock_root/build_artifacts/aiosignal_1667935791922/work
 airportsdata==20240728
