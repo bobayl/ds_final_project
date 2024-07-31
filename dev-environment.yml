@@ -1,0 +1,11 @@
+name: ds_final_project
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.12.0
+  - conda-forge::jupyterlab
+  - pandas
+  - numpy
+  - seaborn
+prefix: /Users/laurent/anaconda3/envs/ds_final_project
