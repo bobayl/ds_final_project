@@ -57,6 +57,7 @@ def main():
 
     # Button to run the Sentence Transformer embedding:
     if st.button("Create Embeddings"):
+        st.write("Creating embeddings...")
         # Clear the search text field
         st.session_state.search_text = ""  # Clear the previous search text
 
@@ -99,8 +100,8 @@ def main():
                     counter = 0
                     for idx in sorted_indices[:top_n]:
                         counter += 1
-                        st.write(f"##### Result {counter}")
-                        st.write(st.session_state.corpus[idx])
+                        st.write(f"##### {filtered_df.iloc[idx].title}")
+                        st.write(f"{st.session_state.corpus[idx][:800]}...")
                         st.write(f"Similarity Score: {cosine_scores[idx]:.4f}")
                         st.write(filtered_df.iloc[idx].url)
 

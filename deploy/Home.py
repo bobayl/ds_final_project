@@ -25,7 +25,7 @@ def main():
     # The dataset
 
     # Construct the relative path to your data file
-    path = "../data/processed/chunk_1.csv"
+    path = "*.csv"
     df = load_df(path)
 
     
