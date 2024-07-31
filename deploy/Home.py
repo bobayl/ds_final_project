@@ -22,7 +22,7 @@ def main():
 
     # Read in the dataset
     # The dataset
-    path = "/data/processed/*.csv"
+    path = "../data/processed/*.csv"
     df = load_df(path)
 
     
