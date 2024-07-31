@@ -26,9 +26,8 @@ def main():
     # The dataset
 
     # Construct the relative path to your data file
-    # path = "*.csv"
-    # df = load_df(path)
-    df = pd.read_csv("chunk_1.csv")
+    path = "../data/processed/*.csv"
+    df = load_df(path)
 
     
 
