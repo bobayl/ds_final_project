@@ -1,6 +1,7 @@
 import streamlit as st
 import altair as alt
 from pathlib import Path
+import pandas as pd
 
 from search_models import *
 from preprocessing_helpers import *
@@ -25,8 +26,9 @@ def main():
     # The dataset
 
     # Construct the relative path to your data file
-    path = "*.csv"
-    df = load_df(path)
+    # path = "*.csv"
+    # df = load_df(path)
+    df = pd.read_csv("chunk_1.csv")
 
     
 
