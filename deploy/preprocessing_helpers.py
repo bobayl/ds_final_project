@@ -153,33 +153,41 @@ def list_to_txt(text_list, txt_file):
 
         return 0
 
-def get_from_to(text, city_names):
+def get_from_to_airport(text, city_names):
     if len(text) > 300:
-        sentence = text[:300].lower()
+        sentence = text[:300]
     else:
-        sentence = text.lower()
+        sentence = text
 
     # Detect the first "from" if any
-    sentence = sentence.split("from")
+    sentence = sentence.split("from", 1)
 
     if len(sentence) > 1:
         # Take the part of the sentence after "from"
         sentence = sentence[1].strip()
 
         # Detect "to" if any
-        sentence = sentence.split("to")
+        sentence = sentence.split("to", 1)
 
         if len(sentence) > 1:
             from_ = sentence[0]
             to_ = sentence[1].split(")")[0].strip()
+            from_city = None
+            to_city = None
 
+            # Find from city and break when found
             for city_name in city_names:
                 if city_name in from_:
-                    from_ = city_name
-                if city_name in to_:
-                    to_ = city_name
+                    from_city = city_name
+                    break
 
-            return from_, to_
+            # Find to city and break when found
+            for city_name in city_names:
+                if city_name in to_:
+                    to_city = city_name
+                    break
+
+            return from_city, to_city
         
         else:
             return None, None     

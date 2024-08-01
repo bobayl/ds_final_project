@@ -9,36 +9,38 @@ import re
 from tqdm import tqdm
 import streamlit as st
 import glob
+import airportsdata
+import pycountry
 
 from scraping_helpers import *
 from preprocessing_helpers import *
+
+def get_cities():
+    airports = airportsdata.load('IATA')  # key is the IATA location code
+    airport_cities = []
+    for airport in airports:
+        city = airports[airport]["city"]
+        if len(city) > 2:
+            airport_cities.append(city)
+
+    return airport_cities
+
+def get_countries():
+    # Get a list of all countries
+    countries = [country.name for country in pycountry.countries]
+
+    return countries
 
 
 
 def update(path):
     """ The function takes the filepath to the full dataset and then updates that dataset by scraping the new entries on the webiste"""
 
-    # The dataset
-    file_list = glob.glob(path)
-
-    # Initialize an empty list to store DataFrames
-    dataframes = []
-
-    # Loop through the list of files and read each file into a DataFrame
-    for file in file_list:
-        sub_df = pd.read_csv(file)  # Read the CSV file
-        dataframes.append(sub_df)  # Append DataFrame to the list
-
-    # Concatenate all DataFrames in the list into a single DataFrame
-    old_df = pd.concat(dataframes, ignore_index=True)
-
-
-
-    
+    # Load the current available dataset
+    old_df = load_df(path)
 
     
     # Read in the current (non-up-to-date) datset
-    #old_df = pd.read_csv(filepath)
     print(f"Length of previous df: {len(old_df)}")
 
     # From the dataset read the href of the first row
@@ -153,16 +155,13 @@ def update(path):
     nltk.download('punkt');
     stop_words = nltk.corpus.stopwords.words('english')
 
-    # Initialize geonamescache
-    gc = geonamescache.GeonamesCache()
-
     # Get a dictionary of cities and countries
-    cities = gc.get_cities()
-    countries = gc.get_countries()
+    cities = get_cities()
+    countries = get_countries()
 
     # Extract city and country names
-    city_names = [remove_accented_chars(city['name']).lower() for city in cities.values()]
-    country_names = [remove_accented_chars(country['name']).lower() for country in countries.values()]
+    city_names = [remove_accented_chars(city.lower()) for city in cities]
+    country_names = [remove_accented_chars(country.lower()) for country in countries]
 
     # Apply the preprocess_text function to each row in df["text"] with tqdm progress bar
     tqdm.pandas(desc="Normalizing texts")  # This line enables tqdm support for Pandas apply function
@@ -181,14 +180,11 @@ def update(path):
     # Remove all line breaks, tabs, etc.
     df_new['text'] = df_new['text'].apply(lambda x: re.sub(r'[\n\r\t\s]+', ' ', x, flags=re.UNICODE))
 
-    # Reprocess flight phase
-    #df_new["flight_phase"] = df_new.apply(lambda row: assign_flight_phase(row["title"], row["text"]), axis=1)
-
     # Reprocess from-to
-    df_new["from"], df_new["to"] = zip(*df_new["text"].progress_apply(lambda x: get_from_to(x, city_names)))
+    df_new["from"], df_new["to"] = zip(*df_new["text"].apply(lambda x: get_from_to_airport(x, city_names)))
 
     # Write the DataFrame to a CSV file with additional options
-    df_new.to_csv(filepath, sep=',', index=False, header=True, na_rep='NULL', encoding='utf-8')
+    df_new.to_csv(path, sep=',', index=False, header=True, na_rep='NULL', encoding='utf-8')
 
     ################################################
     # Write the DataFrame to smaller csv-files
