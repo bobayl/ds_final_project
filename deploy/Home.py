@@ -26,7 +26,7 @@ def main():
     # The dataset
 
     # Construct the relative path to your data file
-    path = "data/processed/*.csv"
+    path = "../data/processed/*.csv"
     df = load_df(path)
 
     
@@ -37,7 +37,7 @@ def main():
 
     st.write("## The Dataset")
     # Show the filtered dataframe
-    st.dataframe(st.session_state.df, column_order=("title", "flight_phase", "text", "occurrence", "url", "created"))
+    st.dataframe(st.session_state.df, column_order=("title", "flight_phase", "from", "to", "text", "occurrence", "url", "created"))
 
     # Display the length of the dataset:
     st.write(f"Length of the dataset: {len(st.session_state.df)}")

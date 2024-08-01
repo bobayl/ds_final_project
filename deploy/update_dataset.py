@@ -11,6 +11,7 @@ import streamlit as st
 import glob
 import airportsdata
 import pycountry
+import time
 
 from scraping_helpers import *
 from preprocessing_helpers import *
@@ -90,6 +91,10 @@ def update(path):
         occurrences.append(occurrence)
         urls.append(url)
 
+        # Sleep for 1 second
+        time.sleep(1)
+
+
     df = pd.DataFrame({
         "title": titles,
         "href": hrefs,
@@ -123,7 +128,7 @@ def update(path):
             start_row = i * chunk_size
             end_row = (i + 1) * chunk_size
             chunk_df = old_df.iloc[start_row:end_row]
-            chunk_df.to_csv(f'../data/processed/chunk_{i+1}.csv', sep=',', index=False, header=True, na_rep='NULL', encoding='utf-8')
+            chunk_df.to_csv(f'{path.rstrip("*.csv")}chunk_{i+1}.csv', sep=',', index=False, header=True, na_rep='NULL', encoding='utf-8')
 
         # # Verification: Display the number of rows in each chunk
         # for i in range(num_chunks):
@@ -170,6 +175,9 @@ def update(path):
     # Drop rows where there is no text
     df = df[df["text"].notna()]
 
+    # Get from to
+    df["from"], df["to"] = zip(*df["text"].apply(lambda x: get_from_to_airport(x, cities)))
+
     # Assign the flight phase to each new row
     #df["flight_phase"] = df["text"].apply(assign_flight_phase)
     df["flight_phase"] = df.apply(lambda row: assign_flight_phase(row["title"], row["text"]), axis=1)
@@ -181,10 +189,8 @@ def update(path):
     df_new['text'] = df_new['text'].apply(lambda x: re.sub(r'[\n\r\t\s]+', ' ', x, flags=re.UNICODE))
 
     # Reprocess from-to
-    df_new["from"], df_new["to"] = zip(*df_new["text"].apply(lambda x: get_from_to_airport(x, city_names)))
+    df_new["from"], df_new["to"] = zip(*df_new["text"].apply(lambda x: get_from_to_airport(x, cities)))
 
-    # Write the DataFrame to a CSV file with additional options
-    df_new.to_csv(path, sep=',', index=False, header=True, na_rep='NULL', encoding='utf-8')
 
     ################################################
     # Write the DataFrame to smaller csv-files
@@ -199,7 +205,7 @@ def update(path):
         start_row = i * chunk_size
         end_row = (i + 1) * chunk_size
         chunk_df = df_new.iloc[start_row:end_row]
-        chunk_df.to_csv(f'../data/processed/chunk_{i+1}.csv', sep=',', index=False, header=True, na_rep='NULL', encoding='utf-8')
+        chunk_df.to_csv(f'{path.rstrip("*.csv")}chunk_{i+1}.csv', sep=',', index=False, header=True, na_rep='NULL', encoding='utf-8')
 
     # # Verification: Display the number of rows in each chunk
     # for i in range(num_chunks):
