@@ -112,8 +112,6 @@ def update(path):
     """ If there are no updates, return the old_df"""
     if len(df) == 0:
         print("Nothing to update")
-        # Reprocess flight phase
-        old_df["flight_phase"] = old_df.apply(lambda row: assign_flight_phase(row["title"], row["text"]), axis=1)
 
         ################################################
         # Write the DataFrame to smaller csv-files
@@ -135,7 +133,7 @@ def update(path):
         #     chunk_df = pd.read_csv(f'../data/processed/chunk_{i+1}.csv')
         #     print(f'chunk_{i+1}.csv shape: {chunk_df.shape}')
         #################################################
-        st.write("Nothing to update")
+        st.write("updated from to")
         return old_df
     else:
         # Print the number of new articles
