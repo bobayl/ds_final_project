@@ -41,7 +41,6 @@ def main():
     st.write("You can paste or describe an aviation occurrence in the field below and the Aviation Herald dataset will be searched for the most similar texts")
 
 
-
     # Initialize session state
     if 'tfidf_vectorizer' not in st.session_state:
         st.session_state.tfidf_vectorizer = None
@@ -62,7 +61,7 @@ def main():
             label="Your search text",
             value=st.session_state.search_text,  # Ensure the current value is preserved
             height=300,
-            max_chars=3000,
+            max_chars=5000,
             placeholder="Your search text for similarity search"
         )
         text = re.sub(r'[\n\r\t\s]+', ' ', text, flags=re.UNICODE) # Remove all linebrakes, tabs, etc.

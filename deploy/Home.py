@@ -11,29 +11,28 @@ from update_dataset import *
  
 
 def main():
-    # Create title and introduction of the project 
+    # Create the app in wide format
+    st.set_page_config(layout="wide")
 
+    # Create title and introduction of the project 
     st.write("# Occurrence Similarity Search on the Aviation Herald Dataset")
     st.write("##### Final Project of the Part Time Datascience Course at Constructor Academy")
     st.write("###### Author: Laurent Bobay")
-    st.write("## Introduction")
-    st.write("Here come the introduction...")
 
 
-    # Show the dataset
-
-    # Read in the dataset
-    # The dataset
-
-    # Construct the relative path to your data file
-    path = "data/processed/*.csv"
+    # Read in and show the dataset
+    path = "../data/processed/*.csv"
     df = load_df(path)
-
-    
-
-    # Initialize session state for the dataframe
     if "df" not in st.session_state:
         st.session_state.df = df
+
+    # Read the aircraft list
+    aircraft_path = "aircraft_list.tsv"
+    aircraft_df = pd.read_csv(aircraft_path, sep='\t')
+    if "aircraft_df" not in st.session_state:
+        st.session_state.aircraft_df = aircraft_df
+    
+    
 
     st.write("## The Dataset")
     # Show the filtered dataframe

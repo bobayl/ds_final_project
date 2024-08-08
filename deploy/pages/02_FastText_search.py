@@ -63,7 +63,7 @@ def main():
             label="Your search text",
             value=st.session_state.search_text,  # Ensure the current value is preserved
             height=300,
-            max_chars=3000,
+            max_chars=5000,
             placeholder="Your search text for similarity search"
         )
         text = re.sub(r'[\n\r\t\s]+', ' ', text, flags=re.UNICODE) # Remove all linebrakes, tabs, etc.
