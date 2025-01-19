@@ -14,11 +14,17 @@ def find_occurrence_type(headline):
     """ Input is a string that is normally leaded by the occurrence type"""
 
     # Split the headline at colons ":"
-    hl_parts = headline.split(":")
+    try:
+        hl_parts = headline.split(":")
+    except:
+        hl_parts = headline
 
-    if len(hl_parts) > 1:
-        if len(hl_parts[0]) < 20:
-            occurrence_type = hl_parts[0].strip().lower()
+    if hl_parts:
+        if len(hl_parts) > 1:
+            if len(hl_parts[0]) < 20:
+                occurrence_type = hl_parts[0].strip().lower()
+            else:
+                occurrence_type = None
         else:
             occurrence_type = None
     else:

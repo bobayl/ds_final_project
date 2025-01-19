@@ -19,15 +19,30 @@ def main():
     # Initialize session state for the dataframe
     if "df" not in st.session_state:
         st.session_state.df = load_df(path)
+
+    # Create a new column with only the year
+    st.session_state.df['date'] = pd.to_datetime(st.session_state.df['created'])
+    st.session_state.df['year'] = st.session_state.df['date'].dt.year
     
     # Filter the dataset
     flight_phase_options = ["All flight phases"] + list(st.session_state.df["flight_phase"].unique())
+    year_options = ["All years"] + list(st.session_state.df["year"].unique())
     selected_flight_phase = st.selectbox("Select flight phase", flight_phase_options)
+    selected_years = st.multiselect("Select years", year_options, default="All years")
 
-    if selected_flight_phase == "All flight phases":
+    # Apply filtering based on selection
+    if selected_flight_phase == "All flight phases" and "All years" in selected_years:
         filtered_df = st.session_state.df
+    elif selected_flight_phase == "All flight phases":
+        filtered_df = st.session_state.df[st.session_state.df['year'].isin(selected_years)]
+    elif "All years" in selected_years:
+        filtered_df = st.session_state.df[st.session_state.df['flight_phase'] == selected_flight_phase]
     else:
-        filtered_df = st.session_state.df[st.session_state.df.flight_phase == selected_flight_phase]
+        filtered_df = st.session_state.df[
+            (st.session_state.df['flight_phase'] == selected_flight_phase) &
+            (st.session_state.df['year'].isin(selected_years))
+        ]
+
 
     # Show the filtered dataframe
     st.dataframe(filtered_df, column_order=("title", "flight_phase", "text", "occurrence", "url"))
@@ -69,7 +84,7 @@ def main():
 
 
         # Slider to select number of results
-        top_n = st.slider("Select number of results", 0, 50, 10, 5)
+        top_n = st.slider("Select number of results", 0, 500, 10, 5)
 
         # Button to submit search text
         if st.button("Submit"):
